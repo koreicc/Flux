@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.flux.R
 import com.flux.data.model.WorkspaceModel
-import com.flux.navigation.NavRoutes
 import com.flux.data.model.WorkspaceModel
 import com.flux.ui.common.SpaceTopBar
 

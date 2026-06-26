@@ -43,6 +43,7 @@ import com.flux.other.icons
  * A reusable dropdown trigger showing the current workspace icon + name.
  * Clicking opens a dropdown menu to switch workspaces or create a new one.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkspaceDropdownTrigger(
     currentWorkspace: WorkspaceModel?,

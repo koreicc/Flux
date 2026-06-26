@@ -219,17 +219,17 @@ fun SpaceMapper(
             states.labelState.allLabels.filter { it.workspaceId==workspace.workspaceId },
             states.settings,
             workspace,
-            allWorkspaces,
             onShowSpaceBottomSheet,
             onSpaceChange,
             onAddCover,
             onRemoveCover,
             onDeleteWorkspace,
             onToggleLock,
-            viewModels.notesViewModel::onEvent,
-            viewModels.settingsViewModel::onEvent,
+            allWorkspaces,
             onWorkspaceSelected,
-            onNewWorkspace
+            onNewWorkspace,
+            viewModels.notesViewModel::onEvent,
+            viewModels.settingsViewModel::onEvent
         )
 
         2 -> TodoScreen(
@@ -237,16 +237,16 @@ fun SpaceMapper(
             states.todoState,
             states.settings,
             workspace,
-            allWorkspaces,
             onShowSpaceBottomSheet,
             onSpaceChange,
             onAddCover,
             onRemoveCover,
             onDeleteWorkspace,
             onToggleLock,
-            viewModels.todoViewModel::onEvent,
+            allWorkspaces,
             onWorkspaceSelected,
-            onNewWorkspace
+            onNewWorkspace,
+            viewModels.todoViewModel::onEvent
         )
 
         3 -> EventScreen(
@@ -254,7 +254,6 @@ fun SpaceMapper(
             states.eventState,
             states.settings,
             workspace,
-            allWorkspaces,
             onShowSpaceBottomSheet,
             onSpaceChange,
             onAddCover,
@@ -262,9 +261,10 @@ fun SpaceMapper(
             onDeleteWorkspace,
             onToggleLock,
             viewModels.settingsViewModel::onEvent,
-            viewModels.eventViewModel::onEvent,
+            allWorkspaces,
             onWorkspaceSelected,
-            onNewWorkspace
+            onNewWorkspace,
+            viewModels.eventViewModel::onEvent
         )
 
         4 -> JournalScreen(
@@ -272,7 +272,6 @@ fun SpaceMapper(
             states.journalState,
             states.settings,
             workspace,
-            allWorkspaces,
             states.labelState.allLabels.filter { it.workspaceId==workspace.workspaceId },
             onShowSpaceBottomSheet,
             onSpaceChange,
@@ -280,9 +279,10 @@ fun SpaceMapper(
             onRemoveCover,
             onDeleteWorkspace,
             onToggleLock,
-            viewModels.journalViewModel::onEvent,
+            allWorkspaces,
             onWorkspaceSelected,
-            onNewWorkspace
+            onNewWorkspace,
+            viewModels.journalViewModel::onEvent
         )
 
         5 -> HabitScreen(
@@ -290,16 +290,16 @@ fun SpaceMapper(
             states.habitState,
             states.settings,
             workspace,
-            allWorkspaces,
             onShowSpaceBottomSheet,
             onSpaceChange,
             onAddCover,
             onRemoveCover,
             onDeleteWorkspace,
             onToggleLock,
-            viewModels.habitViewModel::onEvent,
+            allWorkspaces,
             onWorkspaceSelected,
-            onNewWorkspace
+            onNewWorkspace,
+            viewModels.habitViewModel::onEvent
         )
 
         6 -> AnalyticScreen(
@@ -323,16 +323,16 @@ fun SpaceMapper(
             states.progressBoardState,
             states.settings,
             workspace,
-            allWorkspaces,
             onShowSpaceBottomSheet,
             onSpaceChange,
             onAddCover,
             onRemoveCover,
             onDeleteWorkspace,
             onToggleLock,
-            viewModels.progressBoardViewModel::onEvent,
+            allWorkspaces,
             onWorkspaceSelected,
-            onNewWorkspace
+            onNewWorkspace,
+            viewModels.progressBoardViewModel::onEvent
         )
 
         else -> {
