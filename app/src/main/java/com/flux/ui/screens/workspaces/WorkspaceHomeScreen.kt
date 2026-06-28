@@ -126,79 +126,81 @@ fun WorkspaceHomeScreen(
             }
         }
 
-        val vSpacing = when (gridColumns) {
-            1 -> 12.dp
-            2 -> 16.dp
-            else -> 10.dp
-        }
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Fixed(gridColumns),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(1.dp),
-            verticalItemSpacing = vSpacing,
-            contentPadding = PaddingValues(
-                top = 16.dp,
-                bottom = 64.dp
-            )
-        ) {
-            if (allSpaces.any { it.isPinned }) {
-                item(span = StaggeredGridItemSpan.FullLine) {
-                    Text(
-                        stringResource(R.string.Pinned),
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
-                        modifier = Modifier.padding(vertical = 8.dp)
+        } else {
+            val vSpacing = when (gridColumns) {
+                1 -> 12.dp
+                2 -> 16.dp
+                else -> 10.dp
+            }
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(gridColumns),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(1.dp),
+                verticalItemSpacing = vSpacing,
+                contentPadding = PaddingValues(
+                    top = 16.dp,
+                    bottom = 64.dp
+                )
+            ) {
+                if (allSpaces.any { it.isPinned }) {
+                    item(span = StaggeredGridItemSpan.FullLine) {
+                        Text(
+                            stringResource(R.string.Pinned),
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+                }
+
+                items(allSpaces.filter { it.isPinned }) { space ->
+                    WorkspaceCard(
+                        gridColumns = gridColumns,
+                        iconIndex = space.icon,
+                        radius = radius,
+                        isLocked = space.passKey != null,
+                        cover = space.cover,
+                        title = space.title,
+                        description = space.description,
+                        isSelected = selectedWorkspace.contains(space),
+                        onClick = { handleWorkspaceClick(space) },
+                        onLongPressed = {
+                            if (selectedWorkspace.contains(space)) selectedWorkspace.remove(space)
+                            else selectedWorkspace.add(space)
+                        }
                     )
                 }
-            }
 
-            items(allSpaces.filter { it.isPinned }) { space ->
-                WorkspaceCard(
-                    gridColumns = gridColumns,
-                    iconIndex = space.icon,
-                    radius = radius,
-                    isLocked = space.passKey != null,
-                    cover = space.cover,
-                    title = space.title,
-                    description = space.description,
-                    isSelected = selectedWorkspace.contains(space),
-                    onClick = { handleWorkspaceClick(space) },
-                    onLongPressed = {
-                        if (selectedWorkspace.contains(space)) selectedWorkspace.remove(space)
-                        else selectedWorkspace.add(space)
+                if (allSpaces.any { it.isPinned }) {
+                    item(span = StaggeredGridItemSpan.FullLine) {
+                        Text(
+                            stringResource(R.string.Others),
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                        )
                     }
-                )
-            }
+                }
 
-            if (allSpaces.any { it.isPinned }) {
-                item(span = StaggeredGridItemSpan.FullLine) {
-                    Text(
-                        stringResource(R.string.Others),
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                items(allSpaces.filter { !it.isPinned }) { space ->
+                    WorkspaceCard(
+                        gridColumns = gridColumns,
+                        iconIndex = space.icon,
+                        radius = radius,
+                        isLocked = space.passKey != null,
+                        cover = space.cover,
+                        title = space.title,
+                        description = space.description,
+                        isSelected = selectedWorkspace.contains(space),
+                        onClick = { handleWorkspaceClick(space) },
+                        onLongPressed = {
+                            if (selectedWorkspace.contains(space)) selectedWorkspace.remove(space)
+                            else selectedWorkspace.add(space)
+                        }
                     )
                 }
-            }
-
-            items(allSpaces.filter { !it.isPinned }) { space ->
-                WorkspaceCard(
-                    gridColumns = gridColumns,
-                    iconIndex = space.icon,
-                    radius = radius,
-                    isLocked = space.passKey != null,
-                    cover = space.cover,
-                    title = space.title,
-                    description = space.description,
-                    isSelected = selectedWorkspace.contains(space),
-                    onClick = { handleWorkspaceClick(space) },
-                    onLongPressed = {
-                        if (selectedWorkspace.contains(space)) selectedWorkspace.remove(space)
-                        else selectedWorkspace.add(space)
-                    }
-                )
             }
         }
     }
