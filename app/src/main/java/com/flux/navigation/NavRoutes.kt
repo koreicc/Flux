@@ -203,8 +203,9 @@ val JournalScreens =
         }
     )
 
+// Main settings screen - needs WorkspaceScaffold bars (top bar + bottom bar)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-val SettingsScreens =
+val SettingsMainScreens =
     mapOf<String, @Composable (navController: NavController, snackbarHostState: SnackbarHostState, states: States, viewModels: ViewModels) -> Unit>(
         NavRoutes.Settings.route to { navController, _, states, viewModels ->
             Settings(
@@ -212,7 +213,13 @@ val SettingsScreens =
                 settings = states.settings,
                 onSettingsEvent = viewModels.settingsViewModel::onEvent
             )
-        },
+        }
+    )
+
+// Settings sub-screens - have their own BasicScaffold, no WorkspaceScaffold bars needed
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+val SettingsSubScreens =
+    mapOf<String, @Composable (navController: NavController, snackbarHostState: SnackbarHostState, states: States, viewModels: ViewModels) -> Unit>(
         NavRoutes.Privacy.route to { navController, _, states, viewModels ->
             Privacy(navController, states.settings, viewModels.settingsViewModel::onEvent)
         },
@@ -271,7 +278,8 @@ val EventScreens =
     )
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-val WorkspaceScreens =
+// Workspace list screen - needs WorkspaceScaffold bars (top bar + bottom bar)
+val WorkspaceListScreens =
     mapOf<String, @Composable (navController: NavController, snackbarHostState: SnackbarHostState, states: States, viewModels: ViewModels, workspaceId: String) -> Unit>(
         NavRoutes.Workspace.route to { navController, snackbarHostState, states, viewModels, _ ->
             WorkspaceHomeScreen(
@@ -280,8 +288,12 @@ val WorkspaceScreens =
                 states,
                 viewModels
             )
-        },
+        }
+    )
 
+// Workspace detail/edit screens - have their own bars, no WorkspaceScaffold bars needed
+val WorkspaceDetailScreens =
+    mapOf<String, @Composable (navController: NavController, snackbarHostState: SnackbarHostState, states: States, viewModels: ViewModels, workspaceId: String) -> Unit>(
         NavRoutes.NewWorkspace.route + "/{workspaceId}" to { navController, _, states, viewModels, workspaceId ->
             NewWorkspaceScreen (
                 navController,

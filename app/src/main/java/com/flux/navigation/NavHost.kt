@@ -281,7 +281,8 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
             }
         }
 
-        SettingsScreens.forEach { (route, screen) ->
+        // Main settings screen - needs workspace dropdown top bar + bottom bar
+        SettingsMainScreens.forEach { (route, screen) ->
             animatedComposable(route) {
                 val wsId = states.workspaceState.allWorkspaces.firstOrNull()?.workspaceId ?: ""
                 WorkspaceScaffold(
@@ -292,6 +293,29 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
                     showTopBar = true,
                     showBackButton = false,
                     showBottomBar = true
+                ) {
+                    screen(
+                        navController,
+                        snackbarHostState,
+                        states,
+                        viewModels
+                    )
+                }
+            }
+        }
+
+        // Settings sub-screens - have their own BasicScaffold, no wrapper bars
+        SettingsSubScreens.forEach { (route, screen) ->
+            animatedComposable(route) {
+                val wsId = states.workspaceState.allWorkspaces.firstOrNull()?.workspaceId ?: ""
+                WorkspaceScaffold(
+                    states = states,
+                    viewModels = viewModels,
+                    navController = navController,
+                    workspaceId = wsId,
+                    showTopBar = false,
+                    showBackButton = false,
+                    showBottomBar = false
                 ) {
                     screen(
                         navController,
@@ -392,7 +416,8 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
             }
         }
 
-        WorkspaceScreens.forEach { (route, screen) ->
+        // Workspace list screen - needs workspace dropdown top bar + bottom bar
+        WorkspaceListScreens.forEach { (route, screen) ->
             val arguments = mutableListOf<NamedNavArgument>()
 
             if (route.contains("{workspaceId}")) {
@@ -404,8 +429,6 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
 
             animatedComposable(route, arguments) { entry ->
                 val id = entry.arguments?.getString("workspaceId") ?: ""
-
-                val isListRoute = route == NavRoutes.Workspace.route
                 WorkspaceScaffold(
                     states = states,
                     viewModels = viewModels,
@@ -414,6 +437,39 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
                     showTopBar = true,
                     showBackButton = false,
                     showBottomBar = true
+                ) {
+                    screen(
+                        navController,
+                        snackbarHostState,
+                        states,
+                        viewModels,
+                        id
+                    )
+                }
+            }
+        }
+
+        // Workspace detail/edit screens - have their own bars, no wrapper bars
+        WorkspaceDetailScreens.forEach { (route, screen) ->
+            val arguments = mutableListOf<NamedNavArgument>()
+
+            if (route.contains("{workspaceId}")) {
+                arguments.add(navArgument("workspaceId") {
+                    type = NavType.StringType
+                    nullable = false
+                })
+            }
+
+            animatedComposable(route, arguments) { entry ->
+                val id = entry.arguments?.getString("workspaceId") ?: ""
+                WorkspaceScaffold(
+                    states = states,
+                    viewModels = viewModels,
+                    navController = navController,
+                    workspaceId = id,
+                    showTopBar = false,
+                    showBackButton = false,
+                    showBottomBar = false
                 ) {
                     screen(
                         navController,
@@ -436,7 +492,7 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
                     workspaceId = wsId,
                     showTopBar = false,
                     showBackButton = false,
-                    showBottomBar = true
+                    showBottomBar = false
                 ) {
                     screen(
                         navController,
