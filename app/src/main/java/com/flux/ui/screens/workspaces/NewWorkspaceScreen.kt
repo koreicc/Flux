@@ -47,6 +47,7 @@ import com.flux.R
 import com.flux.data.model.WorkspaceModel
 import com.flux.data.model.getSpacesList
 import com.flux.other.icons
+import com.flux.navigation.NavRoutes
 import com.flux.ui.common.ChangeIconSheet
 import com.flux.ui.common.CompactCard
 import com.flux.ui.common.EditorScaffold
@@ -91,9 +92,11 @@ fun NewWorkspaceScreen(
         canSave = title.isNotBlank(),
         onBackPressed = { navController.popBackStack() },
         onDone = {
+            val wsId = if (isNew) java.util.UUID.randomUUID().toString() else workspace.workspaceId
             onEvent(
                 WorkspaceEvents.UpsertSpace(
                     workspace.copy(
+                        workspaceId = wsId,
                         title = title,
                         description = description,
                         icon = icon,
@@ -102,7 +105,20 @@ fun NewWorkspaceScreen(
                     )
                 )
             )
-            navController.popBackStack()
+            onEvent(WorkspaceEvents.ChangeWorkspace(
+                workspace.copy(
+                    workspaceId = wsId,
+                    title = title,
+                    description = description,
+                    icon = icon,
+                    passKey = passkey,
+                    selectedSpaces = selectedSpacesId.toList()
+                )
+            ))
+            navController.navigate(NavRoutes.WorkspaceHome.withArgs(wsId)) {
+                popUpTo(NavRoutes.Workspace.route) { inclusive = true }
+                launchSingleTop = true
+            }
         }
     ) { innerPadding->
         Column(Modifier.fillMaxSize().padding(innerPadding).padding(12.dp)) {

@@ -61,19 +61,25 @@ fun WorkspaceHomeScreen(
 
     // Auto-navigate to default workspace if set
     val defaultWsId = states.settings.data.defaultWorkspaceId
+    val isAutoNavigating = remember { mutableStateOf(defaultWsId != null && allSpaces.isNotEmpty()) }
     LaunchedEffect(defaultWsId, allSpaces) {
-        if (defaultWsId != null) {
+        if (defaultWsId != null && allSpaces.isNotEmpty()) {
             val ws = allSpaces.find { it.workspaceId == defaultWsId }
             if (ws != null) {
                 if (ws.passKey != null) {
                     lockedWorkspace = ws
+                    isAutoNavigating.value = false
                 } else {
                     navController.navigate(NavRoutes.WorkspaceHome.withArgs(ws.workspaceId)) {
                         popUpTo(NavRoutes.Workspace.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 }
+            } else {
+                isAutoNavigating.value = false
             }
+        } else {
+            isAutoNavigating.value = false
         }
     }
 
@@ -95,7 +101,9 @@ fun WorkspaceHomeScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (allSpaces.isEmpty()) {
+        if (isAutoNavigating.value) {
+            // Show nothing while auto-navigating to prevent flash
+        } else if (allSpaces.isEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
