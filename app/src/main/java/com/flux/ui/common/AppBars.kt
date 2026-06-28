@@ -417,14 +417,7 @@ fun BottomBar(modifier: Modifier, navController: NavController, currentWorkspace
                 )
             }
         }
-        Spacer(Modifier.width(8.dp))
-        IconButton(
-            {navController.navigate(NavRoutes.NewWorkspace.withArgs(""))},
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
-        ) { Icon(Icons.Default.Add, null) }
+
     }
 }
 
