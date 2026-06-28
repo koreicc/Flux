@@ -428,7 +428,13 @@ fun BottomBarCard(
     navController: NavController,
     currentWorkspaceId: String = ""
 ){
-    val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
+    val isHome = screen.route == NavRoutes.Workspace.route
+    val selected = if (isHome) {
+        currentDestination?.route?.startsWith(NavRoutes.WorkspaceHome.route) == true ||
+                currentDestination?.route == NavRoutes.Workspace.route
+    } else {
+        currentDestination?.hierarchy?.any { it.route == screen.route } == true
+    }
 
     val containerColor = if(selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
     val contentColor = if(selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary
@@ -436,12 +442,12 @@ fun BottomBarCard(
     Card(
         modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
         onClick = {
-            if (currentDestination?.route != screen.route) {
-                val route = if (screen.route == NavRoutes.Workspace.route && currentWorkspaceId.isNotBlank()) {
-                    NavRoutes.WorkspaceHome.withArgs(currentWorkspaceId)
-                } else {
-                    screen.route
-                }
+            val route = if (isHome && currentWorkspaceId.isNotBlank()) {
+                NavRoutes.WorkspaceHome.withArgs(currentWorkspaceId)
+            } else {
+                screen.route
+            }
+            if (currentDestination?.route != route) {
                 navController.navigate(route) {
                     launchSingleTop = true
                 }
