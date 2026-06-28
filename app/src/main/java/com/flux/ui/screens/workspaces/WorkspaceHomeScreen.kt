@@ -124,8 +124,6 @@ fun WorkspaceHomeScreen(
                     Text(stringResource(R.string.New_Workspace))
                 }
             }
-        }
-
         } else {
             val vSpacing = when (gridColumns) {
                 1 -> 12.dp
