@@ -290,8 +290,8 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
                     navController = navController,
                     workspaceId = wsId,
                     showTopBar = true,
-                    showBackButton = true,
-                    showBottomBar = false
+                    showBackButton = false,
+                    showBottomBar = true
                 ) {
                     screen(
                         navController,
@@ -411,8 +411,8 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
                     viewModels = viewModels,
                     navController = navController,
                     workspaceId = id,
-                    showTopBar = isListRoute,  // only show top bar on selection grid
-                    showBackButton = !isListRoute,
+                    showTopBar = true,
+                    showBackButton = false,
                     showBottomBar = true
                 ) {
                     screen(
@@ -434,9 +434,9 @@ fun AppNavHost(navController: NavHostController, snackbarHostState: SnackbarHost
                     viewModels = viewModels,
                     navController = navController,
                     workspaceId = wsId,
-                    showTopBar = true,
-                    showBackButton = true,
-                    showBottomBar = false
+                    showTopBar = false,
+                    showBackButton = false,
+                    showBottomBar = true
                 ) {
                     screen(
                         navController,
