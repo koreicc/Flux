@@ -210,8 +210,7 @@ val SettingsScreens =
             Settings(
                 navController = navController,
                 settings = states.settings,
-                onSettingsEvent = viewModels.settingsViewModel::onEvent,
-                workspaces = states.workspaceState.allWorkspaces
+                onSettingsEvent = viewModels.settingsViewModel::onEvent
             )
         },
         NavRoutes.Privacy.route to { navController, _, states, viewModels ->

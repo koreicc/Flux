@@ -11,22 +11,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ContactSupport
 import androidx.compose.material.icons.filled.Coffee
-import androidx.compose.material.icons.filled.Workspaces
 import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PrivacyTip
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -45,63 +38,8 @@ fun Settings(
     navController: NavController,
     settings: Settings,
     onSettingsEvent: (SettingEvents) -> Unit,
-    workspaces: List<WorkspaceModel>,
 ) {
     val context = LocalContext.current
-    var showDefaultWsDialog by remember { mutableStateOf(false) }
-
-    // Default workspace picker dialog
-    if (showDefaultWsDialog) {
-        val allWorkspaces = workspaces
-        AlertDialog(
-            onDismissRequest = { showDefaultWsDialog = false },
-            title = { Text(stringResource(R.string.Default_Workspace)) },
-            text = {
-                LazyColumn {
-                    item {
-                        TextButton(
-                            onClick = {
-                                onSettingsEvent(SettingEvents.UpdateSettings(settings.data.copy(defaultWorkspaceId = null)))
-                                showDefaultWsDialog = false
-                            },
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            Text(
-                                if (settings.data.defaultWorkspaceId == null)
-                                    "• ${stringResource(R.string.No_Default_Workspace)}"
-                                else
-                                    stringResource(R.string.No_Default_Workspace)
-                            )
-                        }
-                    }
-                    allWorkspaces.forEach { ws ->
-                        item {
-                            TextButton(
-                                onClick = {
-                                    onSettingsEvent(SettingEvents.UpdateSettings(settings.data.copy(defaultWorkspaceId = ws.workspaceId)))
-                                    showDefaultWsDialog = false
-                                },
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                Text(
-                                    if (ws.workspaceId == settings.data.defaultWorkspaceId)
-                                        "• ${ws.title}"
-                                    else
-                                        ws.title
-                                )
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = { showDefaultWsDialog = false }) {
-                    Text(stringResource(R.string.Cancel))
-                }
-            }
-        )
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             Modifier.fillMaxSize().padding(horizontal = 12.dp),
@@ -156,17 +94,6 @@ fun Settings(
 
             item {
                 Spacer(Modifier.height(12.dp))
-            }
-
-            // Default Workspace setting
-            item {
-                SettingCategory(
-                    title = stringResource(R.string.Default_Workspace),
-                    subTitle = stringResource(R.string.Default_Workspace_desc),
-                    icon = Icons.Default.Workspaces,
-                    shape = shapeManager(radius = settings.data.cornerRadius, isFirst = true, isLast = true),
-                    action = { showDefaultWsDialog = true }
-                )
             }
 
             item {
